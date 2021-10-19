@@ -5,6 +5,10 @@ inputs:
   chart_uri:
     description: URI to Helm Chart to verify. This can be a path to the chart directory, or an http(s) URI.
     required: true
+  report_type:
+    description: '{all,annotations,digests,metadata,results}'
+    required: true
+    default: results
   verify_args:
     description: Extra arguments to pass to the 'verify' command.
     required: false
@@ -13,8 +17,9 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  env:
-    KUBECONFIG: ${{ env.KUBECONFIG }}
+  # env:
+    # KUBECONFIG: ${{ env.KUBECONFIG }}
   args:
     - ${{ inputs.chart_uri }}
+    - ${{ inputs.report_type }}
     - ${{ inputs.verify_args }}

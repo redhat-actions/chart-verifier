@@ -10,14 +10,29 @@ jobs:
     name: Chart Verifier
     runs-on: ubuntu-20.04
     steps:
-      - name: login
-        uses: redhat-actions/oc-login@v1
+      - uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
 
       - run: echo $KUBECONFIG
 
-      - uses: ./
+      - uses: actions/checkout@v2
         with:
-          chart_uri: https://redhat-actions.github.io/openshift-actions-runner-chart
+          path: chart-verifier-action
+
+      - uses: actions/checkout@v2
+        with:
+          repository: redhat-actions/openshift-actions-runner-chart
+          path: runner-chart
+          ref: main
+
+      - run: |
+          ls
+          ls runner-chart
+          ls chart-verifier-action
+
+      - uses: ./chart-verifier-action
+        with:
+          chart_uri: ./runner-chart
+          verify_args: --set githubOwner=tetchel
