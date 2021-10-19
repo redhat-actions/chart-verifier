@@ -1,0 +1,20 @@
+
+name: 'Red Hat Helm Chart Certifier'
+description: ''
+inputs:
+  chart_uri:
+    description: URI to Helm Chart to verify. This can be a path to the chart directory, or an http(s) URI.
+    required: true
+  verify_args:
+    description: Extra arguments to pass to the 'verify' command.
+    required: false
+# outputs:
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    KUBECONFIG: ${{ env.KUBECONFIG }}
+  args:
+    - ${{ inputs.chart_uri }}
+    - ${{ inputs.verify_args }}
