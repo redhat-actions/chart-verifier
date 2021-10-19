@@ -19,7 +19,8 @@ shift
 extra_args="$@"
 
 set -ex
-# chart-verifier verify --help
+
+chart-verifier verify --help
 
 chart-verifier verify --kubeconfig $KUBECONFIG $extra_args $chart_uri 2>&1 | tee chart-verifier-report.yaml
 
