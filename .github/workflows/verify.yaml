@@ -18,16 +18,16 @@ jobs:
       - run: echo $KUBECONFIG
 
       - uses: actions/checkout@v2
-        with:
-          path: chart-verifier-action
+        # with:
+        #   path: chart-verifier-action
 
-      - uses: actions/checkout@v2
-        with:
-          repository: redhat-actions/openshift-actions-runner-chart
-          path: runner-chart
-          ref: main
+      # - uses: actions/checkout@v2
+      #   with:
+      #     repository: redhat-actions/openshift-actions-runner-chart
+      #     path: runner-chart
+      #     ref: main
 
-      - uses: ./chart-verifier-action
+      - uses: ./
         with:
-          chart_uri: ./runner-chart
-          verify_args: --set githubOwner=tetchel
+          chart_uri: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true
+          verify_args: --chart-set githubOwner=tetchel
