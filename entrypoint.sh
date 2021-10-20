@@ -6,40 +6,81 @@ if [ -z "$KUBECONFIG" ]; then
 	exit 1
 fi
 
-chart_uri=$1
-echo "Chart URI to certify is '$chart_uri'"
+echo "Chart URI to certify is '$CHART_URI'"
 
-if [ -z "$chart_uri" ]; then
+if [ -z "$CHART_URI" ]; then
 	echo "Fatal: Chart URI must be provided as the first argument to this script."
 	exit 1
 fi
 
-report_type=$2
-echo "Report type is '$report_type'"
-
-shift; shift
+echo "Report type is '$REPORT_TYPE'"
 
 set -e
 
-echo "::group::Printing usage"
+echo "::group::Print usage"
 chart-verifier verify --help
 echo "::endgroup::"
 
-# echo "::group::Running 'verify'"
-set -x
-chart-verifier verify --kubeconfig $KUBECONFIG $* $chart_uri 2>&1 | tee chart-verifier-report.yaml
+REPORT_FILENAME=chart-verifier-report.yaml
+RESULTS_FILENAME=results.json
+
+verify_cmd="chart-verifier verify --kubeconfig $KUBECONFIG $* $CHART_URI"
+echo "Running: $verify_cmd"
+$verify_cmd 2>&1 | tee $REPORT_FILENAME
+
+# echo "::group::Print full report"
+# cat $REPORT_FILENAME
 # echo "::endgroup::"
-# echo "::group::Running 'report'"
-chart-verifier report $report_type chart-verifier-report.yaml | tee results.json
-set +x
+
+report_cmd="chart-verifier report $REPORT_TYPE $REPORT_FILENAME"
+echo "Running: $report_cmd"
+$report_cmd 2>&1 | tee $RESULTS_FILENAME
+
+# echo "::group::Print full results"
+# cat $RESULTS_FILENAME
 # echo "::endgroup::"
 
-passed=$(cat results.json | jq -r '.results.passed')
-failed=$(cat results.json | jq -r '.results.failed')
+passed=$(jq -r '.results.passed' $RESULTS_FILENAME)
+failed=$(jq -r '.results.failed' $RESULTS_FILENAME)
 
-echo "\u001b[32m$passed\u001b[0m checks passed"
-echo "\u001b[31m$failed\u001b[0m checks failed"
+if [ -z "$passed" ] || [ -z "$failed" ]; then
+	echo "Fatal: failed to parse JSON from $RESULTS_FILENAME"
+	exit 1
+fi
 
-at_least_one_failed=$(echo $failed ">" "0" | bc -l)
+green="\u001b[32m"
+red="\u001b[31m"
+reset="\u001b[0m"
+if [ "$passed" == "0" ]; then
+	echo -e "${red}${passed} checks passed${reset}"
+elif [ "$passed" == "1" ]; then
+	echo -e "${green}${passed} check passed${reset}"
+else
+	echo -e "${green}${passed} checks passed${reset}"
+fi
 
-exit $at_least_one_failed
+exit_status=1
+if [ "$failed" == "0" ]; then
+	echo -e "${green}${failed} checks failed${reset}"
+	exit_status=0
+elif [ "$failed" == "1" ]; then
+	echo -ne "${red}${failed} check failed${reset}:"
+else
+	echo -e "${red}${failed} checks failed${reset}:"
+fi
+
+if [ "$exit_status" == "1" ]; then
+	MESSAGES_FILE=messages.txt
+	jq -r '.results.message[]' $RESULTS_FILENAME > $MESSAGES_FILE
+
+	while read line; do
+		echo "  - $line"
+	done < $MESSAGES_FILE
+
+	echo
+
+	echo "Exiting with error code due to failed checks"
+fi
+
+# echo "exit $exit_status"
+exit $exit_status

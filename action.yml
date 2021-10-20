@@ -9,6 +9,9 @@ inputs:
     description: '{all,annotations,digests,metadata,results}'
     required: true
     default: results
+  # config_file_path:
+  #   description: Path to chart-verifier configuration file
+  #   required: false
   verify_args:
     description: Extra arguments to pass to the 'verify' command.
     required: false
@@ -17,9 +20,9 @@ inputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  # env:
-    # KUBECONFIG: ${{ env.KUBECONFIG }}
+  env:
+    CHART_URI: ${{ inputs.chart_uri }}
+    REPORT_TYPE: ${{ inputs.report_type }}
+    # CONFIG_FILE_LOCATION: ${{ inputs.config_file_path }}
   args:
-    - ${{ inputs.chart_uri }}
-    - ${{ inputs.report_type }}
     - ${{ inputs.verify_args }}

@@ -27,11 +27,6 @@ jobs:
           path: runner-chart
           ref: main
 
-      - run: |
-          ls
-          ls runner-chart
-          ls chart-verifier-action
-
       - uses: ./chart-verifier-action
         with:
           chart_uri: ./runner-chart
