@@ -41,7 +41,7 @@ verify_extra_args="$@"
 
 # https://github.com/redhat-certification/chart-verifier/issues/208
 
-verify_cmd="chart-verifier $config_args verify --kubeconfig $KUBECONFIG $verify_extra_args $CHART_URI"
+verify_cmd="chart-verifier verify --kubeconfig $KUBECONFIG $verify_extra_args $CHART_URI"
 echo "Running: $verify_cmd"
 $verify_cmd 2>&1 | tee $report_filename
 
@@ -51,7 +51,7 @@ $verify_cmd 2>&1 | tee $report_filename
 
 ### Run 'report'
 
-report_cmd="chart-verifier $config_args report $REPORT_TYPE $report_filename"
+report_cmd="chart-verifier report $REPORT_TYPE $report_filename"
 echo "Running: $report_cmd"
 $report_cmd 2>&1 | tee $results_filename
 
@@ -73,23 +73,23 @@ green="\u001b[32m"
 red="\u001b[31m"
 reset="\u001b[0m"
 if [ "$passed" == "0" ]; then
-    echo -e "${red}${passed} checks passed${reset}"
+    echo -e "❌ ${red}${passed} checks passed${reset}"
 elif [ "$passed" == "1" ]; then
-    echo -e "${green}${passed} check passed${reset}"
+    echo -e "✅ ${green}${passed} check passed${reset}"
 else
-    echo -e "${green}${passed} checks passed${reset}"
+    echo -e "✅ ${green}${passed} checks passed${reset}"
 fi
 
 exit_status=1
 if [ "$failed" == "0" ]; then
-    echo -e "${green}${failed} checks failed${reset}"
+    echo -e "✅ ${green}${failed} checks failed${reset}"
     exit_status=0
 elif [ "$failed" == "1" ]; then
     # Echo with colon and no newline, so the one message looks natural
-    echo -ne "${red}${failed} check failed${reset}:"
+    echo -ne "❌ ${red}${failed} check failed${reset}:"
 else
     # Echo with colon but with newline
-    echo -e "${red}${failed} checks failed${reset}:"
+    echo -e "❌ ${red}${failed} checks failed${reset}:"
 fi
 
 if [ "$exit_status" == "1" ]; then
@@ -103,9 +103,9 @@ if [ "$exit_status" == "1" ]; then
     echo
 
     if [ "$FAIL" != "false" ] && [ "$FAIL" != "no" ]; then
-        echo "Exiting with error code due to failed checks"
+        echo "❌ Exiting with error code due to failed checks"
     else
-        echo "\$FAIL is $FAIL, not exiting with an error code"
+        echo "\$FAIL is '$FAIL', not exiting with an error code"
         exit_status=0
     fi
 fi
