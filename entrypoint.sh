@@ -102,7 +102,12 @@ if [ "$exit_status" == "1" ]; then
 
     echo
 
-    echo "Exiting with error code due to failed checks"
+    if [ "$FAIL" != "false" ] && [ "$FAIL" != "no" ]; then
+        echo "Exiting with error code due to failed checks"
+    else
+        echo "\$FAIL is $FAIL, not exiting with an error code"
+        exit_status=0
+    fi
 fi
 
 # echo "exit $exit_status"

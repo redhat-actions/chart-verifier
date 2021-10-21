@@ -15,6 +15,10 @@ inputs:
   verify_args:
     description: Extra arguments to pass to the 'verify' command. See 'chart-verifier verify --help' for more info.
     required: false
+  fail:
+    description: If true, exit with code 1 if at least one check is failed. Else, always exit with code 0 - ie, never fail the workflow step.
+    required: false
+    default: 'true'
 # outputs:
 
 runs:
@@ -23,6 +27,7 @@ runs:
   env:
     CHART_URI: ${{ inputs.chart_uri }}
     REPORT_TYPE: ${{ inputs.report_type }}
+    FAIL: ${{ inputs.fail }}
     # CONFIG_FILE_LOCATION: ${{ inputs.config_file_path }}
   args:
     - ${{ inputs.verify_args }}
