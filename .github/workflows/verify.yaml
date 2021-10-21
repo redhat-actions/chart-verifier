@@ -31,3 +31,4 @@ jobs:
         with:
           chart_uri: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true
           verify_args: --chart-set githubOwner=tetchel
+          fail: false
