@@ -69,8 +69,8 @@ if [ -z "$passed" ] || [ -z "$failed" ]; then
     exit 1
 fi
 
-echo "::set-output name=report_path::$PWD/$report_filename"
-echo "::set-output name=results_path::$PWD/$results_filename"
+echo "::set-output name=report_filename::$report_filename"
+echo "::set-output name=results_filename::$results_filename"
 echo "::set-output name=passed::$passed"
 echo "::set-output name=failed::$passed"
 

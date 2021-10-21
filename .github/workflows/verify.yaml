@@ -15,7 +15,10 @@ jobs:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
 
-      - run: echo $KUBECONFIG
+      - name: Print Kube context info
+        run: |
+          echo $KUBECONFIG
+          oc whoami
 
       - uses: actions/checkout@v2
         # with:

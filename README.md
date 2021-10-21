@@ -20,8 +20,8 @@
 - https://github.com/redhat-certification/chart-verifier/blob/main/docs/helm-chart-checks.md
 
 ## Outputs
-`report_path`: Path to YAML report file.
-`results_path`: Path to processed JSON results file.
+`report_filename`: Name of YAML report file, which will exist in the `$GITHUB_WORKSPACE` directory.
+`results_filename`: Path to processed JSON results file, which will exist in the `$GITHUB_WORKSPACE` directory.
 `passed`: Number of passed checks.
 `failed`: Number of failed checks.
 
