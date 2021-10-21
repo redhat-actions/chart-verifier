@@ -10,6 +10,8 @@ jobs:
     name: Chart Verifier
     runs-on: ubuntu-20.04
     steps:
+      - uses: actions/checkout@v2
+
       - uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
@@ -18,8 +20,6 @@ jobs:
       - name: Print Kube context info
         run: |
           echo $KUBECONFIG
-
-      - uses: actions/checkout@v2
 
       - uses: ./
         name: Verify Chart

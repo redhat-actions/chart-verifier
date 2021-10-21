@@ -13,7 +13,7 @@ echo "::endgroup::"
 
 echo "KUBECONFIG is '$KUBECONFIG'"
 if [ -z "$KUBECONFIG" ]; then
-    echo "Fatal: \$KUBECONFIG nmust be set in the environment. Please set KUBECONFIG to the path to your Kubernetes config file."
+    echo "Fatal: \$KUBECONFIG must be set in the environment. Please set KUBECONFIG to the path to your Kubernetes config file."
     exit 1
 fi
 
@@ -51,22 +51,14 @@ verify_extra_args="$verify_extra_args$@"
 # https://github.com/redhat-certification/chart-verifier/issues/208
 
 verify_cmd="chart-verifier verify --kubeconfig $KUBECONFIG $verify_extra_args $CHART_URI"
-echo "Running: $verify_cmd"
+echo "::group::Running: $verify_cmd"
 $verify_cmd 2>&1 | tee $report_filename
-
-# echo "::group::Print full report"
-# cat $report_filename
-# echo "::endgroup::"
-
-### Run 'report'
+echo "::endgroup::"
 
 report_cmd="chart-verifier report $REPORT_TYPE $report_filename"
-echo "Running: $report_cmd"
+echo "::group::Running: $report_cmd"
 $report_cmd 2>&1 | tee $results_filename
-
-# echo "::group::Print full results"
-# cat $results_filename
-# echo "::endgroup::"
+echo "::endgroup::"
 
 ### Parse the report JSON to detect passes and fails
 
