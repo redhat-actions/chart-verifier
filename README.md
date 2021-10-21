@@ -19,6 +19,12 @@
 
 - https://github.com/redhat-certification/chart-verifier/blob/main/docs/helm-chart-checks.md
 
+## Outputs
+`report_path`: Path to YAML report file.
+`results_path`: Path to processed JSON results file.
+`passed`: Number of passed checks.
+`failed`: Number of failed checks.
+
 ## Example Workflow Job
 
 Refer to the [example](./.github/workflows/verify.yaml).

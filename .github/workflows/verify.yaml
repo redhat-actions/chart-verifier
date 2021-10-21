@@ -28,7 +28,11 @@ jobs:
       #     ref: main
 
       - uses: ./
+        id: verify
         with:
           chart_uri: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true
           verify_args: --chart-set githubOwner=tetchel
           fail: false
+
+      - name: echo outputs
+        run: echo "${{ toJSON(steps.verify.outputs) }}"

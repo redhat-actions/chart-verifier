@@ -69,6 +69,11 @@ if [ -z "$passed" ] || [ -z "$failed" ]; then
     exit 1
 fi
 
+echo "::set-output name=report_path::$PWD/$report_filename"
+echo "::set-output name=results_path::$PWD/$results_filename"
+echo "::set-output name=passed::$passed"
+echo "::set-output name=failed::$passed"
+
 green="\u001b[32m"
 red="\u001b[31m"
 reset="\u001b[0m"
