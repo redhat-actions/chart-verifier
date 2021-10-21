@@ -1,5 +1,6 @@
 FROM quay.io/redhat-certification/chart-verifier:1.2.3
 
+# https://github.com/redhat-certification/chart-verifier/issues/205
 RUN ln -s /app/chart-verifier /usr/local/bin/chart-verifier
 
 # RUN rpm -ivh https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm \

@@ -2,84 +2,107 @@
 
 echo "KUBECONFIG is '$KUBECONFIG'"
 if [ -z "$KUBECONFIG" ]; then
-	echo "Fatal: KUBECONFIG is not set in the environment. Please set KUBECONFIG to the path to your Kubernetes config file."
-	exit 1
+    echo "Fatal: \$KUBECONFIG nmust be set in the environment. Please set KUBECONFIG to the path to your Kubernetes config file."
+    exit 1
 fi
 
 echo "Chart URI to certify is '$CHART_URI'"
 
 if [ -z "$CHART_URI" ]; then
-	echo "Fatal: Chart URI must be provided as the first argument to this script."
-	exit 1
+    echo "Fatal: \$CHART_URI must be set in the environment. Please set CHART_URI to point to the chart to certify."
+    exit 1
 fi
+
+config_args=""
+# if [ -n "$CONFIG_FILE_PATH" ]; then
+#     echo "Config file path is '$CONFIG_FILE_PATH'"
+#     config_args="--config $CONFIG_FILE_PATH"
+# fi
 
 echo "Report type is '$REPORT_TYPE'"
 
 set -e
 
-echo "::group::Print usage"
+# Echo the usage of both commands, so users know what the inputs mean.
+echo "::group::Print 'verify' usage"
 chart-verifier verify --help
 echo "::endgroup::"
 
-REPORT_FILENAME=chart-verifier-report.yaml
-RESULTS_FILENAME=results.json
+echo "::group::Print 'report' usage"
+chart-verifier report --help
+echo "::endgroup::"
 
-verify_cmd="chart-verifier verify --kubeconfig $KUBECONFIG $* $CHART_URI"
+report_filename=chart-verifier-report.yaml
+results_filename=results.json
+
+verify_extra_args="$@"
+
+### Run 'verify'
+
+# https://github.com/redhat-certification/chart-verifier/issues/208
+
+verify_cmd="chart-verifier $config_args verify --kubeconfig $KUBECONFIG $verify_extra_args $CHART_URI"
 echo "Running: $verify_cmd"
-$verify_cmd 2>&1 | tee $REPORT_FILENAME
+$verify_cmd 2>&1 | tee $report_filename
 
 # echo "::group::Print full report"
-# cat $REPORT_FILENAME
+# cat $report_filename
 # echo "::endgroup::"
 
-report_cmd="chart-verifier report $REPORT_TYPE $REPORT_FILENAME"
+### Run 'report'
+
+report_cmd="chart-verifier $config_args report $REPORT_TYPE $report_filename"
 echo "Running: $report_cmd"
-$report_cmd 2>&1 | tee $RESULTS_FILENAME
+$report_cmd 2>&1 | tee $results_filename
 
 # echo "::group::Print full results"
-# cat $RESULTS_FILENAME
+# cat $results_filename
 # echo "::endgroup::"
 
-passed=$(jq -r '.results.passed' $RESULTS_FILENAME)
-failed=$(jq -r '.results.failed' $RESULTS_FILENAME)
+### Parse the report JSON to detect passes and fails
+
+passed=$(jq -r '.results.passed' $results_filename)
+failed=$(jq -r '.results.failed' $results_filename)
 
 if [ -z "$passed" ] || [ -z "$failed" ]; then
-	echo "Fatal: failed to parse JSON from $RESULTS_FILENAME"
-	exit 1
+    echo "Fatal: failed to parse JSON from $results_filename"
+    exit 1
 fi
 
 green="\u001b[32m"
 red="\u001b[31m"
 reset="\u001b[0m"
 if [ "$passed" == "0" ]; then
-	echo -e "${red}${passed} checks passed${reset}"
+    echo -e "${red}${passed} checks passed${reset}"
 elif [ "$passed" == "1" ]; then
-	echo -e "${green}${passed} check passed${reset}"
+    echo -e "${green}${passed} check passed${reset}"
 else
-	echo -e "${green}${passed} checks passed${reset}"
+    echo -e "${green}${passed} checks passed${reset}"
 fi
 
 exit_status=1
 if [ "$failed" == "0" ]; then
-	echo -e "${green}${failed} checks failed${reset}"
-	exit_status=0
+    echo -e "${green}${failed} checks failed${reset}"
+    exit_status=0
 elif [ "$failed" == "1" ]; then
-	echo -ne "${red}${failed} check failed${reset}:"
+    # Echo with colon and no newline, so the one message looks natural
+    echo -ne "${red}${failed} check failed${reset}:"
 else
-	echo -e "${red}${failed} checks failed${reset}:"
+    # Echo with colon but with newline
+    echo -e "${red}${failed} checks failed${reset}:"
 fi
 
 if [ "$exit_status" == "1" ]; then
-	MESSAGES_FILE=messages.txt
-	jq -r '.results.message[]' $RESULTS_FILENAME > $MESSAGES_FILE
+    messages_file=messages.txt
+    jq -r '.results.message[]' $results_filename > $messages_file
 
-	while read line; do
-		echo "  - $line"
-	done < $MESSAGES_FILE
+    while read line; do
+        echo "  - $line"
+    done < $messages_file
 
-	echo
+    echo
 
-	echo "Exiting with error code due to failed checks"
+    echo "Exiting with error code due to failed checks"
 fi
 
 # echo "exit $exit_status"

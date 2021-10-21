@@ -13,7 +13,7 @@ inputs:
   #   description: Path to chart-verifier configuration file
   #   required: false
   verify_args:
-    description: Extra arguments to pass to the 'verify' command.
+    description: Extra arguments to pass to the 'verify' command. See 'chart-verifier verify --help' for more info.
     required: false
 # outputs:
 
