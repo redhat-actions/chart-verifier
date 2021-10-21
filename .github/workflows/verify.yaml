@@ -29,7 +29,7 @@ jobs:
           verify_args: --chart-set githubOwner=tetchel
           fail: false
 
-      - name: echo outputs
+      - name: Echo outputs
         run: echo "${{ toJSON(steps.verify.outputs) }}"
 
       - uses: ./
@@ -42,5 +42,5 @@ jobs:
           profile_version: "1.1"
           fail: false
 
-      - name: echo outputs
+      - name: Echo outputs again
         run: echo "${{ toJSON(steps.verify-2.outputs) }}"
