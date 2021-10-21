@@ -18,19 +18,11 @@ jobs:
       - name: Print Kube context info
         run: |
           echo $KUBECONFIG
-          oc whoami
 
       - uses: actions/checkout@v2
-        # with:
-        #   path: chart-verifier-action
-
-      # - uses: actions/checkout@v2
-      #   with:
-      #     repository: redhat-actions/openshift-actions-runner-chart
-      #     path: runner-chart
-      #     ref: main
 
       - uses: ./
+        name: Verify Chart
         id: verify
         with:
           chart_uri: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true
@@ -39,3 +31,16 @@ jobs:
 
       - name: echo outputs
         run: echo "${{ toJSON(steps.verify.outputs) }}"
+
+      - uses: ./
+        name: Verify Chart with different profile
+        id: verify-2
+        with:
+          chart_uri: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true
+          verify_args: --chart-set githubOwner=tetchel
+          profile_name: "community"
+          profile_version: "1.1"
+          fail: false
+
+      - name: echo outputs
+        run: echo "${{ toJSON(steps.verify-2.outputs) }}"

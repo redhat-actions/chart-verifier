@@ -12,6 +12,10 @@
 
 - `report_type`: The argument to pass to `report`. One of: `all`, `annotations`, `digests`, `metadata`, `results`. Default: `results`.
 
+- `profile_name`: Run a different set of Chart checks. See https://github.com/redhat-certification/chart-verifier/tree/main/config for a list of profiles. Default: None.
+
+- `profile_version`: Version of the `profile_name` to run. If `profile_name` is set but `profile_version` is not, the latest version is used. Default: None.
+
 - `verify_args`: Extra arguments to pass to the `verify` command. These are passed verbatim, so quotes and spaces must be used as they would for a regular shell invocation. For example, set values in the chart using `--chart-set`. `verify --help` is invoked at the beginning of each action run, so that can be used a a reference. Default: None.
 
 ### Refer to:
@@ -21,8 +25,11 @@
 
 ## Outputs
 `report_filename`: Name of YAML report file, which will exist in the `$GITHUB_WORKSPACE` directory.
+
 `results_filename`: Path to processed JSON results file, which will exist in the `$GITHUB_WORKSPACE` directory.
+
 `passed`: Number of passed checks.
+
 `failed`: Number of failed checks.
 
 ## Example Workflow Job

@@ -9,9 +9,12 @@ inputs:
     description: '{all,annotations,digests,metadata,results}'
     required: true
     default: results
-  # config_file_path:
-  #   description: Path to chart-verifier configuration file
-  #   required: false
+  profile_name:
+    description: Chart checks profile to run. See https://github.com/redhat-certification/chart-verifier/tree/main/config for a list of profiles.
+    required: false
+  profile_version:
+    description: Version of profile_name to run. If profile_name is set but profile_version is not, the latest version is used.
+    required: false
   verify_args:
     description: Extra arguments to pass to the 'verify' command. See 'chart-verifier verify --help' for more info.
     required: false
@@ -27,7 +30,8 @@ runs:
   env:
     CHART_URI: ${{ inputs.chart_uri }}
     REPORT_TYPE: ${{ inputs.report_type }}
+    PROFILE_NAME: ${{ inputs.profile_name }}
+    PROFILE_VERSION: ${{ inputs.profile_version }}
     FAIL: ${{ inputs.fail }}
-    # CONFIG_FILE_LOCATION: ${{ inputs.config_file_path }}
   args:
     - ${{ inputs.verify_args }}

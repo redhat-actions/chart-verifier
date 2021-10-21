@@ -1,5 +1,16 @@
 #!/usr/bin/env sh
 
+set -e
+
+# Echo the usage of both commands, so users know what the inputs mean.
+echo "::group::Print 'verify' usage"
+chart-verifier verify --help
+echo "::endgroup::"
+
+echo "::group::Print 'report' usage"
+chart-verifier report --help
+echo "::endgroup::"
+
 echo "KUBECONFIG is '$KUBECONFIG'"
 if [ -z "$KUBECONFIG" ]; then
     echo "Fatal: \$KUBECONFIG nmust be set in the environment. Please set KUBECONFIG to the path to your Kubernetes config file."
@@ -13,29 +24,27 @@ if [ -z "$CHART_URI" ]; then
     exit 1
 fi
 
-config_args=""
-# if [ -n "$CONFIG_FILE_PATH" ]; then
-#     echo "Config file path is '$CONFIG_FILE_PATH'"
-#     config_args="--config $CONFIG_FILE_PATH"
-# fi
-
 echo "Report type is '$REPORT_TYPE'"
 
-set -e
+profile_args=""
+if [ -n "$PROFILE_NAME" ]; then
+    echo "Using profile.vendortype '$PROFILE_NAME'"
+    profile_args="--set profile.vendortype='$PROFILE_NAME'"
+fi
 
-# Echo the usage of both commands, so users know what the inputs mean.
-echo "::group::Print 'verify' usage"
-chart-verifier verify --help
-echo "::endgroup::"
-
-echo "::group::Print 'report' usage"
-chart-verifier report --help
-echo "::endgroup::"
+if [ -n "$PROFILE_VERSION" ]; then
+    echo "Using profile.version '$PROFILE_VERSION'"
+    profile_args="$profile_args --set profile.version='$PROFILE_VERSION'"
+fi
 
 report_filename=chart-verifier-report.yaml
 results_filename=results.json
 
-verify_extra_args="$@"
+verify_extra_args=""
+if [ -n "$profile_args" ]; then
+    verify_extra_args="$profile_args "
+fi
+verify_extra_args="$verify_extra_args$@"
 
 ### Run 'verify'
 
