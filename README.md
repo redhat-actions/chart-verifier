@@ -2,6 +2,11 @@
 
 **chart-verifier** is a GitHub Action for verifying a Helm chart passes the Red Hat Helm chart certification checks.
 
+## Prerequisites
+
+1. Be logged into a Kubernetes cluster, with the `KUBECONFIG` environment variable set.
+2. Have a Helm chart to verify.
+
 ## Inputs
 - `chart_uri`: URI to Helm chart to verify. This can be a path to the chart directory (containing `Chart.yaml`), or an http(s) URI. **Required**.
 
@@ -13,3 +18,24 @@
 - https://github.com/redhat-certification/chart-verifier
 
 - https://github.com/redhat-certification/chart-verifier/blob/main/docs/helm-chart-checks.md
+
+## Example Workflow Job
+
+Refer to the [example](./.github/workflows/verify.yaml).
+
+```yaml
+jobs:
+  verify-chart:
+    name: Verify Helm Chart
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
+          openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+
+      - uses: redhat-actions/chart-verifier@main
+        with:
+          chart_uri: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true
+          verify_args: --chart-set githubOwner=tetchel
+```
