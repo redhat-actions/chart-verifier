@@ -51,14 +51,14 @@ verify_extra_args="$verify_extra_args$@"
 # https://github.com/redhat-certification/chart-verifier/issues/208
 
 verify_cmd="chart-verifier verify --kubeconfig $KUBECONFIG $verify_extra_args $CHART_URI"
-# echo "::group::Running: $verify_cmd"
+echo "::group::Running: $verify_cmd"
 $verify_cmd 2>&1 | tee $report_filename
-# echo "::endgroup::"
+echo "::endgroup::"
 
 report_cmd="chart-verifier report $REPORT_TYPE $report_filename"
-# echo "::group::Running: $report_cmd"
+echo "::group::Running: $report_cmd"
 $report_cmd 2>&1 | tee $results_filename
-# echo "::endgroup::"
+echo "::endgroup::"
 
 ### Parse the report JSON to detect passes and fails
 
