@@ -51,12 +51,12 @@ verify_extra_args="$verify_extra_args$@"
 # https://github.com/redhat-certification/chart-verifier/issues/208
 
 verify_cmd="chart-verifier verify --kubeconfig $KUBECONFIG $verify_extra_args $CHART_URI"
-echo "::group::Running: $verify_cmd"
+echo "::group::$verify_cmd"
 $verify_cmd 2>&1 | tee $report_filename
 echo "::endgroup::"
 
 report_cmd="chart-verifier report $REPORT_TYPE $report_filename"
-echo "::group::Running: $report_cmd"
+echo "::group::$report_cmd"
 $report_cmd 2>&1 | tee $results_filename
 echo "::endgroup::"
 
@@ -111,7 +111,7 @@ if [ "$exit_status" == "1" ]; then
     if [ "$FAIL" != "false" ] && [ "$FAIL" != "no" ]; then
         echo "❌ Exiting with error code due to failed checks"
     else
-        echo "\$FAIL is '$FAIL', not exiting with an error code"
+        echo "'fail' input is '$FAIL', not exiting with an error code"
         exit_status=0
     fi
 fi
