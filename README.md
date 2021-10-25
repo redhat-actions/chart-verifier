@@ -2,21 +2,23 @@
 
 **chart-verifier** is a GitHub Action for verifying a Helm chart passes the Red Hat Helm chart certification checks.
 
+You can read more about the `chart-verifier` tool at [redhat-certification/chart-verifier](https://github.com/redhat-certification/chart-verifier).
+
+The `chart-verifier` executable is packaged into a Docker image, which can be pulled from [quay.io/redhat-certification/chart-verifier:latest](https://quay.io/redhat-certification/chart-verifier:latest). See [the Dockerfile](./Dockerfile) for the additional steps run for the image used by this action.
+
 ## Prerequisites
 
 1. Be logged into a Kubernetes cluster, with the `KUBECONFIG` environment variable set.
 2. Have a Helm chart to verify.
 
 ## Inputs
-- `chart_uri`: URI to Helm chart to verify. This can be a path to the chart directory (containing `Chart.yaml`), or an http(s) URI. **Required**.
-
-- `report_type`: The argument to pass to `report`. One of: `all`, `annotations`, `digests`, `metadata`, `results`. Default: `results`.
-
-- `profile_name`: Run a different set of Chart checks. See https://github.com/redhat-certification/chart-verifier/tree/main/config for a list of profiles. Default: None.
-
-- `profile_version`: Version of the `profile_name` to run. If `profile_name` is set but `profile_version` is not, the latest version is used. Default: None.
-
-- `verify_args`: Extra arguments to pass to the `verify` command. These are passed verbatim, so quotes and spaces must be used as they would for a regular shell invocation. For example, set values in the chart using `--chart-set`. `verify --help` is invoked at the beginning of each action run, so that can be used a a reference. Default: None.
+| Input | Description | Default |
+| ----- | ----------- | ------- |
+| `chart_uri` | URI to Helm chart to verify. This can be a path a local directory containing `Chart.yaml`, or an http(s) URI. | **Required** |
+| `report_type` |  The argument to pass to `report`. One of: `all`, `annotations`, `digests`, `metadata`, `results`. | `results` |
+| `profile_name` | Run a different set of Chart checks. Refer to [this list of profiles](https://github.com/redhat-certification/chart-verifier/tree/main/config). For example, to run the latest `profile-partner-*.yaml`, pass "partner" in this input. | None |
+| `profile_version` | Version of the `profile_name` to run. If `profile_name` is set but `profile_version` is not, the latest version is used. | None
+| `verify_args` | Extra arguments to pass to the `verify` command. Quotes and spaces must be used as they would for a regular shell invocation. `verify --help` is run at the beginning of each action run for reference. | None |
 
 ### Refer to:
 - https://github.com/redhat-certification/chart-verifier

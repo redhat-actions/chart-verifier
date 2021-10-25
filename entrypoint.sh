@@ -3,11 +3,11 @@
 set -e
 
 # Echo the usage of both commands, so users know what the inputs mean.
-echo "::group::Print 'verify' usage"
+echo "::group::Print 'chart-verifier verify --help'"
 chart-verifier verify --help
 echo "::endgroup::"
 
-echo "::group::Print 'report' usage"
+echo "::group::Print 'chart-verifier report --help'"
 chart-verifier report --help
 echo "::endgroup::"
 
