@@ -91,10 +91,10 @@ if [ "$failed" == "0" ]; then
     echo -e "✅ ${green}${failed} checks failed${reset}"
     exit_status=0
 elif [ "$failed" == "1" ]; then
-    # Echo with colon and no newline, so the one message looks natural
-    echo -ne "❌ ${red}${failed} check failed${reset}:"
+    # Echo with colon for messages follow-up below
+    echo -e "❌ ${red}${failed} check failed${reset}:"
 else
-    # Echo with colon but with newline
+    # Echo with colon for messages follow-up below
     echo -e "❌ ${red}${failed} checks failed${reset}:"
 fi
 
