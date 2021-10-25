@@ -8,8 +8,8 @@ FROM quay.io/redhat-certification/chart-verifier:1.2.3
 #     && rm -rf /var/cache/dnf
 
 RUN curl -sSLfO https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 \
-    && chmod 755 jq \
-    && mv -v jq /usr/local/bin/ \
+    && chmod 755 jq-linux64 \
+    && mv -v jq-linux64 /usr/local/bin/jq \
     && jq --version
 
 # https://github.com/redhat-certification/chart-verifier/issues/205
