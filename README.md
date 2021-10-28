@@ -10,6 +10,7 @@ The `chart-verifier` executable is packaged into a Docker image, which can be pu
 
 1. Be logged into a Kubernetes cluster, with the `KUBECONFIG` environment variable set.
 2. Have a Helm chart to verify.
+3. Make sure that `helm install` succeeds on your cluster, and that any tests pass.
 
 ## Inputs
 | Input | Description | Default |
