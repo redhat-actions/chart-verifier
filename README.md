@@ -55,3 +55,8 @@ jobs:
           chart_uri: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true
           verify_args: --chart-set githubOwner=tetchel
 ```
+
+## Troubleshooting
+If the `verify` step appears to be stuck, it is probably waiting for your chart to be installed successfully. The tool will wait up to 5 minutes by default for `helm install` to succeed.
+
+Make sure your chart can be installed on the currently logged in cluster before using the `chart-verifier`.
