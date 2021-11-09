@@ -15,11 +15,12 @@ The `chart-verifier` executable is packaged into a Docker image, which can be pu
 ## Inputs
 | Input | Description | Default |
 | ----- | ----------- | ------- |
-| `chart_uri` | URI to Helm chart to verify. This can be a path a local directory containing `Chart.yaml`, or an http(s) URI. | **Required** |
+| `chart_uri` | URI to Helm chart to verify. This can be a path to a local directory containing `Chart.yaml`, or an http(s) URI. | **Required** |
 | `report_type` |  The argument to pass to `report`. One of: `all`, `annotations`, `digests`, `metadata`, `results`. | `results` |
 | `profile_name` | Run a different set of Chart checks. Refer to [this list of profiles](https://github.com/redhat-certification/chart-verifier/tree/main/config). For example, to run the latest `profile-partner-*.yaml`, pass "partner" in this input. | None |
 | `profile_version` | Version of the `profile_name` to run. If `profile_name` is set but `profile_version` is not, the latest version is used. | None
 | `verify_args` | Extra arguments to pass to the `verify` command. Quotes and spaces must be used as they would for a regular shell invocation. `verify --help` is run at the beginning of each action run for reference. | None |
+| `fail` | Set it to `false` to not fail the workflow step. If set to true, workflow will fail if at least one check is failed. | `true`
 
 ### Refer to:
 - https://github.com/redhat-certification/chart-verifier
