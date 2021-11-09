@@ -73,7 +73,7 @@ fi
 echo "::set-output name=report_filename::$report_filename"
 echo "::set-output name=results_filename::$results_filename"
 echo "::set-output name=passed::$passed"
-echo "::set-output name=failed::$passed"
+echo "::set-output name=failed::$failed"
 
 green="\u001b[32m"
 red="\u001b[31m"
