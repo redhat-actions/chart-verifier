@@ -20,10 +20,17 @@ jobs:
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
           openshift_token: ${{ secrets.OPENSHIFT_TOKEN }}
+          insecure_skip_tls_verify: true
 
       - name: Print Kube context info
         run: |
           echo $KUBECONFIG
+
+      - name: Install chart-verifier CLI
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          source: github
+          chart-verifier: latest
 
       - name: Ensure secret exists
         run: |
@@ -35,20 +42,20 @@ jobs:
         with:
           chart_uri: ${{ env.CHART_URI }}
           verify_args: ${{ env.VERIFY_ARGS }}
-          # fail: false
+          # fail: true
 
       - name: echo outputs
         run: echo "${{ toJSON(steps.verify.outputs) }}"
 
-      # - uses: ./
-      #   name: Verify Chart with different profile
-      #   id: verify-2
-      #   with:
-      #     chart_uri: ${{ env.CHART_URI }}
-      #     verify_args: ${{ env.VERIFY_ARGS }}
-      #     profile_name: "community"
-      #     profile_version: "1.1"
-      #     fail: false
+      - uses: ./
+        name: Verify Chart with different profile
+        id: verify-2
+        with:
+          chart_uri: ${{ env.CHART_URI }}
+          verify_args: ${{ env.VERIFY_ARGS }}
+          profile_name: "community"
+          profile_version: "1.1"
+          fail: false
 
-      # - name: echo outputs
-      #   run: echo "${{ toJSON(steps.verify-2.outputs) }}"
+      - name: echo outputs
+        run: echo "${{ toJSON(steps.verify-2.outputs) }}"
