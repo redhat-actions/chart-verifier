@@ -68,50 +68,53 @@ async function run(): Promise<void> {
     const verifyExecResult = await verify(chartUri, verifyExtraArgs, kubeconfig);
 
     await fs.writeFile(reportFileName, verifyExecResult.stdout, "utf-8");
+    ghCore.setOutput(Outputs.REPORT_FILENAME, reportFileName);
 
     const reportExecResult = await report(reportType, reportFileName);
 
     await fs.writeFile(resultsFileName, reportExecResult.stdout, "utf-8");
+    ghCore.setOutput(Outputs.RESULTS_FILENAME, resultsFileName);
 
     const resultJsonData = JSON.parse(reportExecResult.stdout);
     const passed = resultJsonData.results.passed;
     const failed = resultJsonData.results.failed;
 
-    ghCore.setOutput(Outputs.REPORT_FILENAME, reportFileName);
-    ghCore.setOutput(Outputs.RESULTS_FILENAME, resultsFileName);
-    ghCore.setOutput(Outputs.PASSED, passed);
-    ghCore.setOutput(Outputs.FAILED, failed);
+    const green = "\u001b[32m";
+    const red = "\u001b[31m";
+    const reset = "\u001b[0m";
 
     if (passed === "0") {
-        ghCore.info(`❌ ${passed} checks passed`);
+        ghCore.info(`❌ ${red}${passed} checks passed${reset}`);
     }
     else if (passed === "1") {
-        ghCore.info(`✅ ${passed} check passed`);
+        ghCore.info(`✅ ${green}${passed} check passed${reset}`);
     }
     else {
-        ghCore.info(`✅ ${passed} checks passed`);
+        ghCore.info(`✅ ${green}${passed} checks passed${reset}`);
     }
+    ghCore.setOutput(Outputs.PASSED, passed);
 
     let exitStatus = 1;
     if (failed === "0") {
-        ghCore.info(`✅ ${failed} checks failed`);
+        ghCore.info(`✅ ${green}${failed} checks failed${reset}`);
         exitStatus = 0;
     }
     else if (failed === "1") {
         // Print with colon for messages follow-up below
-        ghCore.info(`❌ ${failed} check failed:`);
+        ghCore.info(`❌ ${red}${failed} check failed:${reset}`);
     }
     else {
         // Print with colon for messages follow-up below
-        ghCore.info(`❌ ${failed} checks failed:`);
+        ghCore.info(`❌ ${red}${failed} checks failed:${reset}`);
     }
+    ghCore.setOutput(Outputs.FAILED, failed);
 
     if (exitStatus === 1) {
         const messageFile = "messages.txt";
         await fs.writeFile(messageFile, JSON.stringify(resultJsonData.results.message), "utf-8");
         const messages = resultJsonData.results.message.toString().split(",");
         messages.forEach((message: string) => {
-            ghCore.info(`- ${message}`);
+            ghCore.info(`  - ${message}`);
         });
 
         const fail = ghCore.getInput(Inputs.FAIL) || "true";

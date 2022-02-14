@@ -42,7 +42,7 @@ jobs:
         with:
           chart_uri: ${{ env.CHART_URI }}
           verify_args: ${{ env.VERIFY_ARGS }}
-          # fail: true
+          fail: false
 
       - name: echo outputs
         run: echo "${{ toJSON(steps.verify.outputs) }}"
