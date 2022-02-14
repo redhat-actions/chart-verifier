@@ -1,4 +1,4 @@
-FROM quay.io/redhat-certification/chart-verifier:latest
+FROM quay.io/redhat-certification/chart-verifier:1.4.0
 
 # Install from EPEL - no longer used, since it's slower.
 
