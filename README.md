@@ -28,9 +28,9 @@ The `chart-verifier` executable is packaged as a CLI tool, which can be installe
 - https://github.com/redhat-certification/chart-verifier/blob/main/docs/helm-chart-checks.md
 
 ## Outputs
-`report_filename`: Name of YAML report file, which will exist in the `$GITHUB_WORKSPACE` directory.
+`report_file`: Path to the YAML report file.
 
-`results_filename`: Path to processed JSON results file, which will exist in the `$GITHUB_WORKSPACE` directory.
+`report_info_file`: Path to the processed JSON report file.
 
 `passed`: Number of passed checks.
 

@@ -1,5 +1,6 @@
 import * as ghCore from "@actions/core";
 import { promises as fs } from "fs";
+import * as path from "path";
 import * as utils from "./util/utils";
 import ChartVerifier from "./chartVerifier";
 import { Inputs, Outputs } from "./generated/inputs-outputs";
@@ -53,8 +54,11 @@ async function run(): Promise<void> {
         profileArgs.push(`profile.version=${profileVersion}`);
     }
 
-    const reportFileName = "chart-verifier-report.yaml";
-    const resultsFileName = "results.json";
+    const reportFileName = "report.yaml";
+    const reportInfoFileName = "report-info.json";
+
+    const reportFilePath = path.join(process.cwd(), "chartverifier", reportFileName);
+    const reportInfoFilePath = path.join(process.cwd(), "chartverifier", reportInfoFileName);
 
     const verifyExtraArgs = [];
     if (profileArgs.length > 0) {
@@ -65,17 +69,19 @@ async function run(): Promise<void> {
     verifyExtraArgs.push(...verifyArgs);
 
     // Run verify
-    const verifyExecResult = await verify(chartUri, verifyExtraArgs, kubeconfig);
+    await verify(chartUri, verifyExtraArgs, kubeconfig);
 
-    await fs.writeFile(reportFileName, verifyExecResult.stdout, "utf-8");
-    ghCore.setOutput(Outputs.REPORT_FILENAME, reportFileName);
+    ghCore.setOutput(Outputs.REPORT_FILE, reportFilePath);
+    ghCore.info(`✍️ Setting output "${Outputs.REPORT_FILE}" to "${reportFilePath}"`);
 
-    const reportExecResult = await report(reportType, reportFileName);
+    // Run report
+    await report(reportType, reportFilePath);
 
-    await fs.writeFile(resultsFileName, reportExecResult.stdout, "utf-8");
-    ghCore.setOutput(Outputs.RESULTS_FILENAME, resultsFileName);
+    ghCore.setOutput(Outputs.REPORT_INFO_FILE, reportInfoFilePath);
+    ghCore.info(`✍️ Setting output "${Outputs.REPORT_INFO_FILE}" to "${reportInfoFilePath}"`);
 
-    const resultJsonData = JSON.parse(reportExecResult.stdout);
+    const reportInfo = await fs.readFile(reportInfoFilePath, "utf-8");
+    const resultJsonData = JSON.parse(reportInfo);
     const passed = resultJsonData.results.passed;
     const failed = resultJsonData.results.failed;
 
@@ -83,6 +89,7 @@ async function run(): Promise<void> {
     const red = "\u001b[31m";
     const reset = "\u001b[0m";
 
+    ghCore.setOutput(Outputs.PASSED, passed);
     if (passed === "0") {
         ghCore.info(`❌ ${red}${passed} checks passed${reset}`);
     }
@@ -92,8 +99,8 @@ async function run(): Promise<void> {
     else {
         ghCore.info(`✅ ${green}${passed} checks passed${reset}`);
     }
-    ghCore.setOutput(Outputs.PASSED, passed);
 
+    ghCore.setOutput(Outputs.FAILED, failed);
     let exitStatus = 1;
     if (failed === "0") {
         ghCore.info(`✅ ${green}${failed} checks failed${reset}`);
@@ -107,7 +114,6 @@ async function run(): Promise<void> {
         // Print with colon for messages follow-up below
         ghCore.info(`❌ ${red}${failed} checks failed:${reset}`);
     }
-    ghCore.setOutput(Outputs.FAILED, failed);
 
     if (exitStatus === 1) {
         const messageFile = "messages.txt";

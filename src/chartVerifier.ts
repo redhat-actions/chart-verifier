@@ -41,6 +41,8 @@ namespace ChartVerifier {
     export enum Flags {
         Help = "help",
         Kubeconfig = "kubeconfig",
+        WriteToFile = "write-to-file",
+        Output = "output",
     }
 
     export type Options = { [key in Flags]?: string };

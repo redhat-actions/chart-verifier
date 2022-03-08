@@ -3,6 +3,8 @@ name: Chart Verifier
 on:
   push:
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'  # every day at midnight
 
 jobs:
   chart-verifier:
@@ -46,6 +48,12 @@ jobs:
 
       - name: echo outputs
         run: echo "${{ toJSON(steps.verify.outputs) }}"
+
+      - name: Print report
+        run: cat ${{ steps.verify.outputs.report_filepath }}
+
+      - name: Print report info
+        run: cat ${{ steps.verify.outputs.report_info_filepath }}
 
       - uses: ./
         name: Verify Chart with different profile
