@@ -28,10 +28,10 @@ inputs:
     required: false
     default: 'true'
 outputs:
-  report_filename:
-    description: Name of the file which contains the report.
-  results_filename:
-    description: Name of the file containing results.
+  report_file:
+    description: Path to the file which contains the report.
+  report_info_file:
+    description: Path to the file containing report information.
   passed:
     description: Number of checks passed.
   failed:
