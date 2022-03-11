@@ -54,13 +54,13 @@ export enum Outputs {
      */
     PASSED = "passed",
     /**
-     * Path of the file which contains the report.
+     * Path to the file which contains the report.
      * Required: false
      * Default: None.
      */
     REPORT_FILE = "report_file",
     /**
-     * Name of the file containing report information.
+     * Path to the file containing report information.
      * Required: false
      * Default: None.
      */

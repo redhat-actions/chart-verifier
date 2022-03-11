@@ -4,7 +4,7 @@
   "engines": {
     "node": "12"
   },
-  "description": "AAction for Red Hat Helm Chart Certification",
+  "description": "Action for Red Hat Helm Chart Certification",
   "repository": {
     "type": "git",
     "url": "https://github.com/redhat-actions/chart-verifier"
