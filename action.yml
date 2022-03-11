@@ -1,6 +1,10 @@
 
 name: 'Red Hat Helm Chart Certifier'
 description: 'Action for Red Hat Helm Chart Certification'
+author: 'Red Hat'
+branding:
+  icon: circle
+  color: red
 inputs:
   chart_uri:
     description: URI to Helm Chart to verify. This can be a path to the chart directory, or an http(s) URI.
