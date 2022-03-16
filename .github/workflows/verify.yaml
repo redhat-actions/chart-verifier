@@ -50,10 +50,10 @@ jobs:
         run: echo "${{ toJSON(steps.verify.outputs) }}"
 
       - name: Print report
-        run: cat ${{ steps.verify.outputs.report_filepath }}
+        run: cat ${{ steps.verify.outputs.report_file }}
 
       - name: Print report info
-        run: cat ${{ steps.verify.outputs.report_info_filepath }}
+        run: cat ${{ steps.verify.outputs.report_info_file }}
 
       - uses: ./
         name: Verify Chart with different profile
