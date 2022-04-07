@@ -64,9 +64,11 @@ async function run(): Promise<void> {
     if (profileArgs.length > 0) {
         verifyExtraArgs.push(...profileArgs);
     }
-    const verifyArgs = ghCore.getInput(Inputs.VERIFY_ARGS).split(" ");
-
-    verifyExtraArgs.push(...verifyArgs);
+    const verifyArgs = ghCore.getInput(Inputs.VERIFY_ARGS);
+    if (verifyArgs !== "") {
+        const trimVerifyArgs = verifyArgs.trim().split(/\s+/);
+        verifyExtraArgs.push(...trimVerifyArgs);
+    }
 
     // Run verify
     await verify(chartUri, verifyExtraArgs, kubeconfig);
