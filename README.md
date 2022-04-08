@@ -8,7 +8,7 @@ The `chart-verifier` executable is packaged as a CLI tool, which can be installe
 
 ## Prerequisites
 
-1. Be logged into a Kubernetes cluster, with the `KUBECONFIG` environment variable set.
+1. Be logged into a Kubernetes cluster, with the `KUBECONFIG` environment variable set. (Can be skipped if you don't need kubeconfig related checks to pass.)
 2. Have a Helm chart to verify.
 3. Make sure that `helm install` succeeds on your cluster, and that any tests pass.
 

@@ -29,7 +29,7 @@ async function run(): Promise<void> {
 
     const kubeconfig = process.env.KUBECONFIG;
     if (!kubeconfig) {
-        throw new Error(`❌ KUBECONFIG must be set in the environment.`
+        ghCore.warning(`In order to pass kubeconfig related checks, KUBECONFIG must be set in the environment.`
         + `Please set KUBECONFIG to the path to your Kubernetes config file.`);
     }
 

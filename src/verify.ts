@@ -1,8 +1,11 @@
 import ChartVerifier from "./chartVerifier";
 import { ExecResult } from "./types";
 
-export async function verify(chartUri: string, verifyArgs: string[], kubeconfig: string): Promise<ExecResult> {
-    const verifyOptions = ChartVerifier.getOptions({ kubeconfig, "write-to-file": "" });
+export async function verify(chartUri: string, verifyArgs: string[], kubeconfig?: string): Promise<ExecResult> {
+    const verifyOptions = ChartVerifier.getOptions({ "write-to-file": "" });
+    if (kubeconfig) {
+        verifyOptions.push(...ChartVerifier.getOptions({ kubeconfig }));
+    }
 
     const execResult = ChartVerifier.exec(
         ChartVerifier.getChartVerifierExecutable(),
