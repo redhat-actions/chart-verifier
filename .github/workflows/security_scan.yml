@@ -32,4 +32,3 @@ jobs:
         uses: redhat-actions/crda@v1
         with:
           crda_key: ${{ secrets.CRDA_KEY }}
-          fail_on: never
