@@ -9,14 +9,14 @@ on:
 jobs:
   chart-verifier:
     name: Chart Verifier
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
 
     env:
       CHART_URI: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true
       VERIFY_ARGS: --chart-set githubOwner=${{ github.repository_owner }} --chart-set githubRepository=chart-verifier --chart-set githubPat=${{ secrets.REPO_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - uses: redhat-actions/oc-login@v1
         with:

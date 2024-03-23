@@ -2,7 +2,7 @@
   "name": "chart-verifier",
   "version": "1.0.0",
   "engines": {
-    "node": "16"
+    "node": "20"
   },
   "description": "Action for Red Hat Helm Chart Certification",
   "repository": {
@@ -21,23 +21,23 @@
   "author": "Red Hat",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.5.0",
-    "@actions/exec": "^1.1.0",
-    "@actions/github": "^5.0.0",
-    "@actions/io": "^1.1.1",
-    "strip-ansi": "^7.0.1",
+    "@actions/core": "^1.10.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.0",
+    "@actions/io": "^1.1.3",
+    "strip-ansi": "^7.1.0",
     "zlib": "^1.0.5"
   },
   "devDependencies": {
     "@redhat-actions/action-io-generator": "^1.5.0",
     "@redhat-actions/eslint-config": "^1.3.2",
     "@redhat-actions/tsconfig": "^1.2.0",
-    "@types/node": "^14.17.15",
-    "@types/sarif": "^2.1.4",
-    "@typescript-eslint/eslint-plugin": "^4.31.0",
-    "@typescript-eslint/parser": "^4.31.0",
-    "@vercel/ncc": "^0.24.1",
-    "eslint": "^7.32.0",
-    "typescript": "^4.4.2"
+    "@types/node": "^20",
+    "@types/sarif": "^2.1.7",
+    "@typescript-eslint/eslint-plugin": "^7.3.1",
+    "@typescript-eslint/parser": "^7.3.1",
+    "@vercel/ncc": "^0.38.1",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.3"
   }
 }
