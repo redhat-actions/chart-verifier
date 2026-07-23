@@ -17,7 +17,7 @@ concurrency:
 jobs:
   chart-verifier:
     name: Chart Verifier
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     env:
       CHART_URI: https://github.com/redhat-actions/openshift-actions-runner-chart/blob/release-chart/packages/actions-runner-1.1.tgz?raw=true

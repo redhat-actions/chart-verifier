@@ -31,7 +31,7 @@ concurrency:
 jobs:
   lint:
     name: Run ESLint
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v7
@@ -40,7 +40,7 @@ jobs:
 
   check-dist:
     name: Check Distribution
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     env:
       BUNDLE_FILE: "dist/index.js"
       BUNDLE_COMMAND: "npm run bundle"
@@ -58,7 +58,7 @@ jobs:
 
   check-inputs-outputs:
     name: Check Input and Output enums
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     env:
       IO_FILE: ./src/generated/inputs-outputs.ts
     steps:

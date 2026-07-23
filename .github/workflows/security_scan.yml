@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   crda-scan:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     name: Scan project vulnerability with CRDA
     steps:
 
