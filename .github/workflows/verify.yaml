@@ -37,7 +37,7 @@ jobs:
           echo $KUBECONFIG
 
       - name: Install chart-verifier CLI
-        uses: redhat-actions/openshift-tools-installer@v1
+        uses: redhat-actions/openshift-tools-installer@v2
         with:
           source: github
           chart-verifier: latest
