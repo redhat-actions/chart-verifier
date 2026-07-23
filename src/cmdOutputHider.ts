@@ -18,7 +18,7 @@ export default class CmdOutputHider extends Writable {
     public write(chunk: Buffer): boolean {
         if (!this.hasEchoedCmdLine) {
             this.outStream.write(chunk);
-            if ((chunk.toString() as string).includes("\n")) {
+            if (chunk.toString().includes("\n")) {
                 this.hasEchoedCmdLine = true;
                 this.outStream.write(`*** Suppressing command output\n`);
             }
