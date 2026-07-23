@@ -2,6 +2,7 @@ import * as ghCore from "@actions/core";
 import { promises as fs } from "fs";
 import * as path from "path";
 import * as utils from "./util/utils";
+import { buildProfileArgs, splitVerifyArgs } from "./util/args";
 import ChartVerifier from "./chartVerifier";
 import { Inputs, Outputs } from "./generated/inputs-outputs";
 import { verify } from "./verify";
@@ -40,19 +41,16 @@ async function run(): Promise<void> {
     ghCore.info(`Report type is "${reportType}"`);
 
     const profileName = ghCore.getInput(Inputs.PROFILE_NAME);
-    const profileArgs = [];
     if (profileName) {
         ghCore.info(`Using profile.vendortype "${profileName}"`);
-        profileArgs.push("--set");
-        profileArgs.push(`profile.vendortype=${profileName}`);
     }
 
     const profileVersion = ghCore.getInput(Inputs.PROFILE_VERSION);
     if (profileVersion) {
         ghCore.info(`Using profile.version "${profileVersion}"`);
-        profileArgs.push("--set");
-        profileArgs.push(`profile.version=${profileVersion}`);
     }
+
+    const profileArgs = buildProfileArgs(profileName, profileVersion);
 
     const reportFileName = "report.yaml";
     const reportInfoFileName = "report-info.json";
@@ -60,15 +58,7 @@ async function run(): Promise<void> {
     const reportFilePath = path.join(process.cwd(), "chartverifier", reportFileName);
     const reportInfoFilePath = path.join(process.cwd(), "chartverifier", reportInfoFileName);
 
-    const verifyExtraArgs = [];
-    if (profileArgs.length > 0) {
-        verifyExtraArgs.push(...profileArgs);
-    }
-    const verifyArgs = ghCore.getInput(Inputs.VERIFY_ARGS);
-    if (verifyArgs !== "") {
-        const trimVerifyArgs = verifyArgs.trim().split(/\s+/);
-        verifyExtraArgs.push(...trimVerifyArgs);
-    }
+    const verifyExtraArgs = [...profileArgs, ...splitVerifyArgs(ghCore.getInput(Inputs.VERIFY_ARGS))];
 
     // Run verify
     await verify(chartUri, verifyExtraArgs, kubeconfig);

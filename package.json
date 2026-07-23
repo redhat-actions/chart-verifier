@@ -16,6 +16,7 @@
     "bundle": "ncc build src/index.ts --source-map --minify",
     "clean": "rm -rf out/ dist/",
     "lint": "eslint . --max-warnings=0",
+    "test": "vitest run",
     "generate-ios": "npx action-io-generator -w -o ./src/generated/inputs-outputs.ts"
   },
   "keywords": [],
@@ -33,6 +34,7 @@
     "@vercel/ncc": "^0.44.1",
     "eslint": "^10.7.0",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.65.0"
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^4.1.10"
   }
 }
