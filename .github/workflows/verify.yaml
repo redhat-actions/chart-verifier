@@ -26,6 +26,13 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Install OpenShift tools
+        uses: redhat-actions/openshift-tools-installer@v2
+        with:
+          source: github
+          oc: latest
+          chart-verifier: latest
+
       - uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{ secrets.OPENSHIFT_SERVER }}
@@ -35,12 +42,6 @@ jobs:
       - name: Print Kube context info
         run: |
           echo $KUBECONFIG
-
-      - name: Install chart-verifier CLI
-        uses: redhat-actions/openshift-tools-installer@v1
-        with:
-          source: github
-          chart-verifier: latest
 
       - name: Ensure secret exists
         run: |
