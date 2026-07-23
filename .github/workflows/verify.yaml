@@ -1,11 +1,7 @@
 name: Chart Verifier
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
-  schedule:
-    - cron: '0 0 * * *'  # every day at midnight
 
 permissions:
   contents: read

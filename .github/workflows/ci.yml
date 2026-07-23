@@ -2,24 +2,10 @@ name: CI Checks
 on:
   push:
     branches: [main]
-    paths:
-      - 'src/**'
-      - 'package*.json'
-      - 'tsconfig.json'
-      - 'eslint.config.mjs'
-      - 'action.yml'
-      - '.github/workflows/ci.yml'
   pull_request:
-    paths:
-      - 'src/**'
-      - 'package*.json'
-      - 'tsconfig.json'
-      - 'eslint.config.mjs'
-      - 'action.yml'
-      - '.github/workflows/ci.yml'
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'  # every day at midnight
+    - cron: '0 0 * * *'
 
 permissions:
   contents: read
