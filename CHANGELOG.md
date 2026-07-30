@@ -1,6 +1,12 @@
 # chart-verifier CHANGELOG
 
-## v2
+## v2.0.1
+- Bump `redhat-actions/oc-login` from v1 to v2 in verify workflow
+- Bump dev dependencies (`eslint`, `@types/node`)
+- Update CODEOWNERS to use `@redhat-actions/maintainers`
+- Remove repo-level SECURITY.md in favor of org-wide default
+
+## v2.0.0
 - **Breaking**: Upgrade action runtime from Node 20 to Node 24
 - Upgrade `@actions/core` from v1 to v3 and `@actions/exec` from v1 to v3
 - Upgrade TypeScript from v5.4 to v6, ESLint from v8 to v10 (flat config)
