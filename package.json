@@ -30,11 +30,11 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@redhat-actions/action-io-generator": "^1.5.0",
-    "@types/node": "^26.1.2",
-    "@vercel/ncc": "^0.44.1",
-    "eslint": "^10.8.0",
+    "@types/node": "^26.2.0",
+    "@vercel/ncc": "^0.45.0",
+    "eslint": "^10.8.1",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.65.0",
+    "typescript-eslint": "^8.67.0",
     "vitest": "^4.1.10"
   }
 }
